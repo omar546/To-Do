@@ -32,16 +32,16 @@ Widget buildTextField({
         onChanged: onChange,
         onTap: onTap,
         style: TextStyle(
-          color: Styles.greyColor,
+          color: Styles.greyColor,fontSize: 20
         ),
         cursorColor: Styles.gumColor,
         controller: controller,
         // Set the validator function
         decoration: InputDecoration(
-          prefixIcon: Icon(prefix, color: Styles.greyColor),
+          prefixIcon: Icon(prefix, color: Styles.gumColor),
           contentPadding: EdgeInsets.symmetric(vertical: 8.0),
           labelStyle: TextStyle(
-            fontSize: 13.0,
+            fontSize: 16.0,
             color: Styles.gumColor,
           ),
           labelText: labelText,

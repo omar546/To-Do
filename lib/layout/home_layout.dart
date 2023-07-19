@@ -90,107 +90,88 @@ class _HomeLayoutState extends State<HomeLayout> {
           } else {
             scaffoldKey.currentState
                 ?.showBottomSheet(
-                  (context) => FractionallySizedBox(
-                    alignment: Alignment.center,
-                    heightFactor: 0.45,
+                  (context) => Container(
+                    color: Styles.lightBlackColor,
                     child: Container(
                       color: Styles.lightBlackColor,
-                      child: Container(
-                        color: Styles.lightBlackColor,
-                        child: Form(
-                          key: formKey,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const SizedBox(height: 35.0, width: double.infinity),
-                              buildTextField(
-                                context: context,
-                                labelText: 'Title',
-                                controller: _titleController,
-                                prefix: Icons.title_rounded,
-                                validate: (String? value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please enter a title';
-                                  }
-                                  return null; // Return null to indicate the input is valid
-                                },
-                                type: TextInputType.text,
-                              ),
-                              const SizedBox(height: 10.0, width: double.infinity),
-                              Wrap(
-                                spacing: 16.0,
-                                runSpacing: 16.0,
-                                children: [
-                                  buildTextField(
-                                      widthRit: 0.4,
-                                      context: context,
-                                      labelText: 'Date',
-                                      controller: _dateController,
-                                      prefix: Icons.date_range_rounded,
-                                      type: TextInputType.datetime,
-                                      onTap: () {
-                                        showDatePicker(
-                                          context: context,
-                                          initialDate: DateTime.now(),
-                                          firstDate: DateTime.now(),
-                                          lastDate: DateTime(2025),
-                                        ).then((date) {
-                                          _dateController.text =
-                                              DateFormat.yMMMd()
-                                                  .format(date!);
-                                        });
-                                      }),
-                                  buildTextField(
-                                      widthRit: 0.4,
-                                      context: context,
-                                      labelText: 'Time',
-                                      controller: _timeController,
-                                      prefix: Icons.access_time_rounded,
-                                      type: TextInputType.datetime,
-                                      onTap: () {
-                                        showTimePicker(
-                                                context: context,
-                                                initialTime: TimeOfDay.now())
-                                            .then(
-                                          (time) {
-                                            _timeController.text =
-                                                time!.format(context);
-                                          },
-                                        ).catchError(
-                                          (error) {
-                                            _timeController.text = "";
-                                          },
-                                        );
-                                      }),
-                                  SizedBox(
-                                      height: 0,
-                                      width:
-                                          MediaQuery.of(context).size.width *
-                                              0.4),
-                                  SizedBox(
-                                      height: 0,
-                                      width:
-                                          MediaQuery.of(context).size.width *
-                                              0.4),
+                      child: Form(
+                        key: formKey,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const SizedBox(height: 35.0, width: double.infinity),
+                            buildTextField(
+                              context: context,
+                              labelText: 'Title',
+                              controller: _titleController,
+                              prefix: Icons.title_rounded,
+                              validate: (String? value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter a title';
+                                }
+                                return null; // Return null to indicate the input is valid
+                              },
+                              type: TextInputType.text,
+                            ),
+                            const SizedBox(height: 10.0, width: double.infinity),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(iconSize: 30,
+                                    icon: Icon(Icons.date_range_rounded,color: Styles.gumColor,),
+                                  onPressed: () {
+                                  showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime.now(),
+                                    lastDate: DateTime(2025),
+                                  ).then((date) {
+                                    _dateController.text =
+                                        DateFormat.yMMMd()
+                                            .format(date!);
+                                  }); },),
+                                Text('Date',style: TextStyle(color: Styles.greyColor,fontFamily: "Thunder",fontSize: 20),),
+                                IconButton(
+                                  iconSize: 30,
+                                    icon: Icon(Icons.access_time_rounded,color: Styles.gumColor,size: 30,),
+                                    onPressed: () {
+                                      showTimePicker(
+                                              context: context,
+                                              initialTime: TimeOfDay.now())
+                                          .then(
+                                        (time) {
+                                          _timeController.text =
+                                              time!.format(context);
+                                        },
+                                      ).catchError(
+                                        (error) {
+                                          _timeController.text = "";
+                                        },
+                                      );
+                                    }),
+                                Text('Time',style: TextStyle(color: Styles.greyColor,fontFamily: "Thunder",fontSize: 20),),
 
-                                  // buildTextField(
-                                  //     context: context,
-                                  //     labelText: 'Status',
-                                  //     controller: _statusController,
-                                  //     prefix: Icons.task_outlined,
-                                  //     onTap: null,
-                                  //     validate: (value) {
-                                  //       if (value == null || value.isEmpty) {
-                                  //         value = "new";
-                                  //       }
-                                  //       return null; // Return null to indicate the input is valid
-                                  //     },
-                                  //     type: TextInputType.text),
-                                ],
-                              ),
-                              // const SizedBox(height: 80.0, width: double.infinity),
-                            ],
-                          ),
+
+
+                                // buildTextField(
+                                //     context: context,
+                                //     labelText: 'Status',
+                                //     controller: _statusController,
+                                //     prefix: Icons.task_outlined,
+                                //     onTap: null,
+                                //     validate: (value) {
+                                //       if (value == null || value.isEmpty) {
+                                //         value = "new";
+                                //       }
+                                //       return null; // Return null to indicate the input is valid
+                                //     },
+                                //     type: TextInputType.text),
+                              ],
+                            ),
+                            // const SizedBox(height: 80.0, width: double.infinity),
+                            const SizedBox(height: 35.0, width: double.infinity),
+
+                          ],
                         ),
                       ),
                     ),
