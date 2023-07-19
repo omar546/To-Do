@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/shared/styles/styles.dart';
+import '../shared/components/components.dart';
+import '../shared/components/constants.dart';
 
 class NewTasksScreen extends StatelessWidget {
-  const NewTasksScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        'New Tasks',
-        style: TextStyle(
-          fontSize: 25,
-          fontFamily: 'Thunder',
-          color: Styles.greyColor
-        ),
-      ),
-    );
+    return ListView.separated(
+        itemBuilder: (context, index) => buildTaskItem(tasks[index]),
+        separatorBuilder: (context, index) => const SizedBox(height: 1,),
+        itemCount: tasks.length);
   }
 }

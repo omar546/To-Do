@@ -52,5 +52,61 @@ Widget buildTextField({
   );
 }
 
+Widget buildTaskItem(Map model) => Padding(
+  padding: const EdgeInsets.all(10.0),
+  child: Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Container(
+        height: 40,
+        width: 60,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15.0),
+          color: Styles.greyColor,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Center(child: Text('${model['time']}',style: TextStyle(fontSize: 18,fontFamily: 'Thunder'),)),
+        ),
+      ),
+      SizedBox(width: 20,),
+      Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            constraints: BoxConstraints(maxWidth: 200.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15.0),
+              color: Styles.greyColor,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: FittedBox(
+                  fit: BoxFit.scaleDown, // Scale the text to fit within the container
+                  alignment: Alignment.center, // Center the text within the container
+                  child: Text('${model['title']}',overflow:TextOverflow.ellipsis,style: TextStyle(fontFamily: 'Thunder',fontSize: 25))),
+            ),
+          ),
+
+        ],
+      ),
+      SizedBox(width: 20,),
+
+      Container(
+        height: 40,
+        width: 70,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15.0),
+          color: Styles.greyColor,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Center(child: Text('${model['date']}',style: TextStyle(fontSize: 16,fontFamily: 'Thunder'),)),
+        ),
+      ),
+    ],
+  ),
+);
+
 
 

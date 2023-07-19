@@ -1,3 +1,4 @@
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
@@ -6,6 +7,7 @@ import 'package:todo_app/modules/done_tasks.dart';
 import 'package:todo_app/shared/styles/styles.dart';
 import '../modules/new_tasks.dart';
 import '../shared/components/components.dart';
+import '../shared/components/constants.dart';
 
 class HomeLayout extends StatefulWidget {
   const HomeLayout({Key? key}) : super(key: key);
@@ -15,12 +17,12 @@ class HomeLayout extends StatefulWidget {
 }
 
 class _HomeLayoutState extends State<HomeLayout> {
-  var ScaffoldKey = GlobalKey<ScaffoldState>();
+  var scaffoldKey = GlobalKey<ScaffoldState>();
   var formKey = GlobalKey<FormState>();
   bool isButtonSheetShown = false;
   IconData fabIcon = Icons.edit;
   int currentIndex = 0;
-  List<Map> tasks=[];
+
   // TextEditingController instances for each input field
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
@@ -29,7 +31,7 @@ class _HomeLayoutState extends State<HomeLayout> {
 
   late Database database;
   List<Widget> screens = [
-    const NewTasksScreen(),
+     NewTasksScreen(),
     const DoneTasksScreen(),
     const ArchivedTasksScreen(),
   ];
@@ -42,23 +44,28 @@ class _HomeLayoutState extends State<HomeLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: ScaffoldKey,
+      key: scaffoldKey,
       backgroundColor: Styles.blackColor,
       appBar: AppBar(
+        elevation: 2,
         automaticallyImplyLeading: false,
         backgroundColor: Styles.blackColor,
         title: const Center(
           child: Text(
-            'ToDo',
+            'To Do',
             style: TextStyle(
               color: Styles.greyColor,
               fontFamily: 'Thunder-semi',
-              fontSize: 32,
+              fontSize: 20,
             ),
           ),
         ),
       ),
-      body: screens[currentIndex],
+      body: ConditionalBuilder(
+        condition: tasks.length > 0,
+        builder: (context)=> screens[currentIndex],
+        fallback: (context)=> Center(child: CircularProgressIndicator()),
+      ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Styles.gumColor,
         onPressed: () {
@@ -69,118 +76,120 @@ class _HomeLayoutState extends State<HomeLayout> {
                 time: _timeController.text,
                 date: _dateController.text,
               ).then((value) {
-                Navigator.pop(context);
-                isButtonSheetShown = false;
-                setState(() {
-                  fabIcon = Icons.edit;
+                getDataFromDatabase(database).then((value)
+                {
+                  Navigator.pop(context);
+                  setState(() {
+                    isButtonSheetShown = false;
+                      fabIcon = Icons.edit;
+                    tasks =value;
+                  });
                 });
               });
             }
           } else {
-            ScaffoldKey.currentState
+            scaffoldKey.currentState
                 ?.showBottomSheet(
                   (context) => FractionallySizedBox(
                     alignment: Alignment.center,
                     heightFactor: 0.45,
                     child: Container(
                       color: Styles.lightBlackColor,
-                      child: SingleChildScrollView(
-                        child: Container(
-                          color: Styles.lightBlackColor,
-                          child: Form(
-                            key: formKey,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                SizedBox(height: 35.0, width: double.infinity),
-                                buildTextField(
-                                  context: context,
-                                  labelText: 'Title',
-                                  controller: _titleController,
-                                  prefix: Icons.title_rounded,
-                                  validate: (String? value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please enter a title';
-                                    }
-                                    return null; // Return null to indicate the input is valid
-                                  },
-                                  type: TextInputType.text,
-                                ),
-                                SizedBox(height: 35.0, width: double.infinity),
-                                Wrap(
-                                  spacing: 16.0,
-                                  runSpacing: 16.0,
-                                  children: [
-                                    buildTextField(
-                                        widthRit: 0.4,
-                                        context: context,
-                                        labelText: 'Date',
-                                        controller: _dateController,
-                                        prefix: Icons.date_range_rounded,
-                                        type: TextInputType.datetime,
-                                        onTap: () {
-                                          showDatePicker(
-                                            context: context,
-                                            initialDate: DateTime.now(),
-                                            firstDate: DateTime.now(),
-                                            lastDate: DateTime(2025),
-                                          ).then((date) {
-                                            _dateController.text =
-                                                DateFormat.yMMMd()
-                                                    .format(date!);
-                                          });
-                                        }),
-                                    buildTextField(
-                                        widthRit: 0.4,
-                                        context: context,
-                                        labelText: 'Time',
-                                        controller: _timeController,
-                                        prefix: Icons.access_time_rounded,
-                                        type: TextInputType.datetime,
-                                        onTap: () {
-                                          showTimePicker(
-                                                  context: context,
-                                                  initialTime: TimeOfDay.now())
-                                              .then(
-                                            (time) {
-                                              _timeController.text =
-                                                  time!.format(context);
-                                            },
-                                          ).catchError(
-                                            (error) {
-                                              _timeController.text = "";
-                                            },
-                                          );
-                                        }),
-                                    SizedBox(
-                                        height: 0,
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.4),
-                                    SizedBox(
-                                        height: 0,
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.4),
+                      child: Container(
+                        color: Styles.lightBlackColor,
+                        child: Form(
+                          key: formKey,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const SizedBox(height: 35.0, width: double.infinity),
+                              buildTextField(
+                                context: context,
+                                labelText: 'Title',
+                                controller: _titleController,
+                                prefix: Icons.title_rounded,
+                                validate: (String? value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter a title';
+                                  }
+                                  return null; // Return null to indicate the input is valid
+                                },
+                                type: TextInputType.text,
+                              ),
+                              const SizedBox(height: 10.0, width: double.infinity),
+                              Wrap(
+                                spacing: 16.0,
+                                runSpacing: 16.0,
+                                children: [
+                                  buildTextField(
+                                      widthRit: 0.4,
+                                      context: context,
+                                      labelText: 'Date',
+                                      controller: _dateController,
+                                      prefix: Icons.date_range_rounded,
+                                      type: TextInputType.datetime,
+                                      onTap: () {
+                                        showDatePicker(
+                                          context: context,
+                                          initialDate: DateTime.now(),
+                                          firstDate: DateTime.now(),
+                                          lastDate: DateTime(2025),
+                                        ).then((date) {
+                                          _dateController.text =
+                                              DateFormat.yMMMd()
+                                                  .format(date!);
+                                        });
+                                      }),
+                                  buildTextField(
+                                      widthRit: 0.4,
+                                      context: context,
+                                      labelText: 'Time',
+                                      controller: _timeController,
+                                      prefix: Icons.access_time_rounded,
+                                      type: TextInputType.datetime,
+                                      onTap: () {
+                                        showTimePicker(
+                                                context: context,
+                                                initialTime: TimeOfDay.now())
+                                            .then(
+                                          (time) {
+                                            _timeController.text =
+                                                time!.format(context);
+                                          },
+                                        ).catchError(
+                                          (error) {
+                                            _timeController.text = "";
+                                          },
+                                        );
+                                      }),
+                                  SizedBox(
+                                      height: 0,
+                                      width:
+                                          MediaQuery.of(context).size.width *
+                                              0.4),
+                                  SizedBox(
+                                      height: 0,
+                                      width:
+                                          MediaQuery.of(context).size.width *
+                                              0.4),
 
-                                    // buildTextField(
-                                    //     context: context,
-                                    //     labelText: 'Status',
-                                    //     controller: _statusController,
-                                    //     prefix: Icons.task_outlined,
-                                    //     onTap: null,
-                                    //     validate: (value) {
-                                    //       if (value == null || value.isEmpty) {
-                                    //         value = "new";
-                                    //       }
-                                    //       return null; // Return null to indicate the input is valid
-                                    //     },
-                                    //     type: TextInputType.text),
-                                  ],
-                                ),
-                                SizedBox(height: 60.0, width: double.infinity),
-                              ],
-                            ),
+                                  // buildTextField(
+                                  //     context: context,
+                                  //     labelText: 'Status',
+                                  //     controller: _statusController,
+                                  //     prefix: Icons.task_outlined,
+                                  //     onTap: null,
+                                  //     validate: (value) {
+                                  //       if (value == null || value.isEmpty) {
+                                  //         value = "new";
+                                  //       }
+                                  //       return null; // Return null to indicate the input is valid
+                                  //     },
+                                  //     type: TextInputType.text),
+                                ],
+                              ),
+                              // const SizedBox(height: 80.0, width: double.infinity),
+                            ],
                           ),
                         ),
                       ),
@@ -216,12 +225,12 @@ class _HomeLayoutState extends State<HomeLayout> {
             currentIndex = index;
           });
         },
-        items: [
-          const BottomNavigationBarItem(
+        items: const [
+          BottomNavigationBarItem(
               icon: Icon(Icons.list_alt_rounded), label: 'Tasks'),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
               icon: Icon(Icons.task_alt_rounded), label: 'Done'),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
               icon: Icon(Icons.archive_outlined), label: "Archived"),
         ],
       ),
@@ -243,8 +252,9 @@ class _HomeLayoutState extends State<HomeLayout> {
     }, onOpen: (database) {
       getDataFromDatabase(database).then((value)
       {
-        tasks =value;
-        print(tasks);
+        setState(() {
+          tasks =value;
+        });
       });
       print('database opened');
     });
@@ -263,7 +273,7 @@ class _HomeLayoutState extends State<HomeLayout> {
     await database.transaction((txn) async {
       // Example of inserting data into the 'tasks' table.
       await txn.rawInsert(
-          'INSERT INTO tasks VALUES("$currentIndex","$title","$date","$time","new")');
+          'INSERT INTO tasks(title, date, time,status) VALUES("$title","$date","$time","new")');
     }).then((_) {
       // The transaction was successful.
       print('$_ inserted successfully.');
