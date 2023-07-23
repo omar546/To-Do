@@ -1,5 +1,5 @@
 # To-Do
-![icon](https://github.com/omar546/To-Do/assets/71936776/0965ff9b-f480-45e6-89f8-0053728c73cf)
+![icon](https://github.com/omar546/To-Do/assets/71936776/84262f9c-2d4a-409b-b2b3-87740487df0f)
 
 
 a to-do list app to manage your tasks 
@@ -11,8 +11,8 @@ in the process, I learned and worked with BLoC, Cubit, SQFLite
 - create and add new tasks with their time and date attributes
 - manage your tasks mark them as done, archive, delete
 
+![WhatsApp Video 2023-07-23 at 13 02 19](https://github.com/omar546/To-Do/assets/71936776/31f8caca-506e-4655-bc82-40a16e3c4b5d)
 
-![WhatsApp Video 2023-07-23 at 13 02 19](https://github.com/omar546/To-Do/assets/71936776/6bfb987d-bcab-47d1-aad1-284dd1e6e76a)
 
 ## Installation
 
