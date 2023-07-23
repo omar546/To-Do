@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/shared/styles/styles.dart';
+
+import '../cubit/cubit.dart';
+import '../styles/styles.dart';
 
 Widget buildTextField({
-  double widthRit = 0.7,
+  double widthRit = 0.6,
   required BuildContext context,
   required String labelText,
   required TextEditingController controller,
   required IconData prefix,
-   bool isClickable = true,
-   var onTap,
+  bool isClickable = true,
+  var onTap,
   var validate,
   required TextInputType type,
   var onSubmit,
@@ -16,11 +18,11 @@ Widget buildTextField({
 }) {
   return Container(
     width: MediaQuery.of(context).size.width * widthRit,
-    height: MediaQuery.of(context).size.height * 0.08,
+    height: MediaQuery.of(context).size.height * 0.07,
     decoration: BoxDecoration(
       color: Styles.lightBlackColor,
-      border: Border.all(color: Styles.greyColor),
-      borderRadius: BorderRadius.circular(25.0),
+      border: Border.all(color: Styles.greyColor, width: 2),
+      borderRadius: BorderRadius.circular(26.0),
     ),
     child: Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
@@ -31,20 +33,19 @@ Widget buildTextField({
         onFieldSubmitted: onSubmit,
         onChanged: onChange,
         onTap: onTap,
-        style: TextStyle(
-          color: Styles.greyColor,fontSize: 20
-        ),
+        style: const TextStyle(color: Styles.greyColor, fontSize: 16),
         cursorColor: Styles.gumColor,
         controller: controller,
         // Set the validator function
         decoration: InputDecoration(
           prefixIcon: Icon(prefix, color: Styles.gumColor),
-          contentPadding: EdgeInsets.symmetric(vertical: 8.0),
-          labelStyle: TextStyle(
-            fontSize: 16.0,
-            color: Styles.gumColor,
+          hintText: labelText,
+          hintStyle: TextStyle(
+            color: Styles.gumColor.withOpacity(0.5),
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
           ),
-          labelText: labelText,
+          contentPadding: const EdgeInsets.symmetric(vertical: 4.0),
           border: InputBorder.none,
         ),
       ),
@@ -52,46 +53,135 @@ Widget buildTextField({
   );
 }
 
-Widget buildTaskItem(Map model) => Padding(
-  padding: const EdgeInsets.all(10.0),
-  child: Row(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Center(child: Text('${model['time']}',style: TextStyle(fontSize: 14,fontFamily: 'Thunder',color: Styles.greyColor),)),
-      ),
-      SizedBox(width: 25,),
-      Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            constraints: BoxConstraints(maxWidth: 200.0),
-            decoration: BoxDecoration(
-              border: Border.all(width: 1.5,color: Styles.gumColor,),
-              borderRadius: BorderRadius.circular(15.0),
-              color: Styles.greyColor.withOpacity(0.2),
+Widget buildTaskItem({required Map model, context, required index}) =>
+    Dismissible(
+      onDismissed: (direction){
+        AppCubit.get(context).deleteDatabase(id: model['id']);
+      },
+      key: Key(model['id'].toString()),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width * 0.65),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 1.5,
+                      color: Styles.gumColor,
+                    ),
+                    borderRadius: BorderRadius.circular(15.0),
+                    color: Styles.greyColor.withOpacity(0.2),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Center(
+                              child: Text(
+                            '${model['time']}',
+                            style: const TextStyle(
+                                fontSize: 14,
+                                fontFamily: 'Thunder',
+                                color: Styles.greyColor),
+                          )),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 7),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 0.2,
+                            child: Text('${model['title']}',
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: const TextStyle(
+                                    fontFamily: 'Thunder',
+                                    fontSize: 20,
+                                    color: Styles.whiteColor)),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Center(
+                              child: Text(
+                            '${model['date']}',
+                            style: const TextStyle(
+                                fontSize: 14,
+                                fontFamily: 'Thunder',
+                                color: Styles.greyColor),
+                          )),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: FittedBox(
-                  fit: BoxFit.scaleDown, // Scale the text to fit within the container
-                  alignment: Alignment.center, // Center the text within the container
-                  child: Text('${model['title']}',overflow:TextOverflow.ellipsis,style: TextStyle(fontFamily: 'Thunder',fontSize: 25,color: Styles.whiteColor))),
+            SizedBox(
+              width: 10,
             ),
-          ),
-
-        ],
+            Visibility(
+              visible: index == 0 || index == 2,
+              child: IconButton(
+                  splashRadius: 20,
+                  onPressed: () {
+                    AppCubit.get(context).updateDatabase(
+                      status: 'done',
+                      id: model['id'],
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.check_circle_outline_rounded,
+                    color: Styles.greyColor,
+                    size: 25,
+                  )),
+            ),
+            Visibility(
+              visible: index == 0 || index == 1,
+              child: IconButton(
+                  splashRadius: 20,
+                  onPressed: () {
+                    AppCubit.get(context).updateDatabase(
+                      status: 'archive',
+                      id: model['id'],
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.archive_outlined,
+                    color: Styles.greyColor,
+                    size: 25,
+                  )),
+            ),
+            Visibility(
+              visible: index == 1 || index == 2,
+              child: IconButton(
+                  splashRadius: 20,
+                  onPressed: () {
+                    AppCubit.get(context).updateDatabase(
+                      status: 'new',
+                      id: model['id'],
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.hide_source_rounded,
+                    color: Styles.greyColor,
+                    size: 25,
+                  )),
+            ),
+          ],
+        ),
       ),
-      SizedBox(width: 20,),
-
-      Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Center(child: Text('${model['date']}',style: TextStyle(fontSize: 14,fontFamily: 'Thunder',color: Styles.greyColor),)),
-      ),
-    ],
-  ),
-);
-
-
-
+    );
