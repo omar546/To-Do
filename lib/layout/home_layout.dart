@@ -150,22 +150,6 @@ class _HomeLayoutState extends State<HomeLayout> {
                                       );
                                     }),
                                 Text('Time',style: TextStyle(color: Styles.greyColor,fontFamily: "Thunder",fontSize: 20),),
-
-
-
-                                // buildTextField(
-                                //     context: context,
-                                //     labelText: 'Status',
-                                //     controller: _statusController,
-                                //     prefix: Icons.task_outlined,
-                                //     onTap: null,
-                                //     validate: (value) {
-                                //       if (value == null || value.isEmpty) {
-                                //         value = "new";
-                                //       }
-                                //       return null; // Return null to indicate the input is valid
-                                //     },
-                                //     type: TextInputType.text),
                               ],
                             ),
                             // const SizedBox(height: 80.0, width: double.infinity),

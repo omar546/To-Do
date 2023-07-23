@@ -57,34 +57,27 @@ Widget buildTaskItem(Map model) => Padding(
   child: Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
-      Container(
-        height: 40,
-        width: 60,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15.0),
-          color: Styles.greyColor,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: Center(child: Text('${model['time']}',style: TextStyle(fontSize: 18,fontFamily: 'Thunder'),)),
-        ),
+      Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Center(child: Text('${model['time']}',style: TextStyle(fontSize: 14,fontFamily: 'Thunder',color: Styles.greyColor),)),
       ),
-      SizedBox(width: 20,),
+      SizedBox(width: 25,),
       Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
             constraints: BoxConstraints(maxWidth: 200.0),
             decoration: BoxDecoration(
+              border: Border.all(width: 1.5,color: Styles.gumColor,),
               borderRadius: BorderRadius.circular(15.0),
-              color: Styles.greyColor,
+              color: Styles.greyColor.withOpacity(0.2),
             ),
             child: Padding(
               padding: const EdgeInsets.all(15.0),
               child: FittedBox(
                   fit: BoxFit.scaleDown, // Scale the text to fit within the container
                   alignment: Alignment.center, // Center the text within the container
-                  child: Text('${model['title']}',overflow:TextOverflow.ellipsis,style: TextStyle(fontFamily: 'Thunder',fontSize: 25))),
+                  child: Text('${model['title']}',overflow:TextOverflow.ellipsis,style: TextStyle(fontFamily: 'Thunder',fontSize: 25,color: Styles.whiteColor))),
             ),
           ),
 
@@ -92,17 +85,9 @@ Widget buildTaskItem(Map model) => Padding(
       ),
       SizedBox(width: 20,),
 
-      Container(
-        height: 40,
-        width: 70,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15.0),
-          color: Styles.greyColor,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: Center(child: Text('${model['date']}',style: TextStyle(fontSize: 16,fontFamily: 'Thunder'),)),
-        ),
+      Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Center(child: Text('${model['date']}',style: TextStyle(fontSize: 14,fontFamily: 'Thunder',color: Styles.greyColor),)),
       ),
     ],
   ),
