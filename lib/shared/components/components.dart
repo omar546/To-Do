@@ -55,6 +55,18 @@ Widget buildTextField({
 
 Widget buildTaskItem({required Map model, context, required index}) =>
     Dismissible(
+      direction: DismissDirection.startToEnd,
+      background:
+      Container(
+        alignment: AlignmentDirectional.centerStart,
+        color: Styles.gumColor,
+        child: const Padding(
+          padding: EdgeInsets.fromLTRB(30.0, 0.0, 10.0, 0.0),
+          child: Icon(Icons.delete_forever_rounded,
+            color: Styles.blackColor,
+          ),
+        ),
+      ),
       onDismissed: (direction){
         AppCubit.get(context).deleteDatabase(id: model['id']);
       },
@@ -130,7 +142,7 @@ Widget buildTaskItem({required Map model, context, required index}) =>
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
             Visibility(
