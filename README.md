@@ -19,6 +19,6 @@ in the process, I learned and worked with BLoC, Cubit, SQFLite
 
 ## Installation
 
-you can try it by downloading it directly from <a href="https://download947.mediafire.com/3fxj4831syegOx2ugRT_8BfsypChJiM_hG5dA9oYam7EMUrTW6Jj6_xXnP32anuSgZSnSkkyGlcj2A6o6R6jSDALyffVTWjulGmwYHQMipKJpD3TK71gLAO92gEqP6MPrh5KCykHjvaY5nuEA1n6D3zVHx1FwrDpLOVDbJeDVJxcVg/8g4r1orr3xtgupi/ToDo.apk">HERE</a>
+you can try it by downloading it directly from <a href="https://www.mediafire.com/file/8g4r1orr3xtgupi/ToDo.apk/file">HERE</a>
 
 
