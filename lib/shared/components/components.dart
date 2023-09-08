@@ -16,37 +16,40 @@ Widget buildTextField({
   var onSubmit,
   var onChange,
 }) {
-  return Container(
-    width: MediaQuery.of(context).size.width * widthRit,
-    height: MediaQuery.of(context).size.height * 0.07,
-    decoration: BoxDecoration(
-      color: Styles.lightBlackColor,
-      border: Border.all(color: Styles.greyColor, width: 2),
-      borderRadius: BorderRadius.circular(26.0),
-    ),
+  return Expanded(
     child: Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-      child: TextFormField(
-        enabled: isClickable,
-        validator: validate,
-        keyboardType: type,
-        onFieldSubmitted: onSubmit,
-        onChanged: onChange,
-        onTap: onTap,
-        style: const TextStyle(color: Styles.greyColor, fontSize: 16),
-        cursorColor: Styles.gumColor,
-        controller: controller,
-        // Set the validator function
-        decoration: InputDecoration(
-          prefixIcon: Icon(prefix, color: Styles.gumColor),
-          hintText: labelText,
-          hintStyle: TextStyle(
-            color: Styles.gumColor.withOpacity(0.5),
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
+      padding: const EdgeInsets.symmetric(horizontal: 50.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Styles.lightBlackColor,
+          border: Border.all(color: Styles.greyColor, width: 2),
+          borderRadius: BorderRadius.circular(26.0),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+          child: TextFormField(
+            enabled: isClickable,
+            validator: validate,
+            keyboardType: type,
+            onFieldSubmitted: onSubmit,
+            onChanged: onChange,
+            onTap: onTap,
+            style: const TextStyle(color: Styles.greyColor, fontSize: 16),
+            cursorColor: Styles.gumColor,
+            controller: controller,
+            // Set the validator function
+            decoration: InputDecoration(
+              prefixIcon: Icon(prefix, color: Styles.gumColor),
+              hintText: labelText,
+              hintStyle: TextStyle(
+                color: Styles.gumColor.withOpacity(0.5),
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+              // contentPadding: const EdgeInsets.symmetric(vertical: 4.0),
+              border: InputBorder.none,
+            ),
           ),
-          contentPadding: const EdgeInsets.symmetric(vertical: 4.0),
-          border: InputBorder.none,
         ),
       ),
     ),
@@ -93,48 +96,47 @@ Widget buildTaskItem({required Map model, context, required index}) =>
                   child: Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(4.0),
                           child: Center(
-                              child: Text(
+                              child: Column(
+                                children: [
+                                  Text(
                             '${model['time']}',
                             style: const TextStyle(
-                                fontSize: 14,
-                                fontFamily: 'Thunder',
-                                color: Styles.greyColor),
-                          )),
+                                    fontSize: 14,
+                                    fontFamily: 'Thunder',
+                                    color: Styles.greyColor),
+                          ),
+                                  const SizedBox(height: 10,),
+                                  Text(
+                                    '${model['date']}',
+                                    style: const TextStyle(
+                                        fontSize: 14,
+                                        fontFamily: 'Thunder',
+                                        color: Styles.greyColor),
+                                  )
+                                ],
+                              )),
                         ),
                         const SizedBox(
                           width: 10,
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 7),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.2,
+                          child: SizedBox(
+                            width: 100,
                             child: Text('${model['title']}',
                                 textAlign: TextAlign.center,
                                 overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
+                                maxLines: 5,
                                 style: const TextStyle(
                                     fontFamily: 'Thunder',
                                     fontSize: 20,
                                     color: Styles.whiteColor)),
                           ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Center(
-                              child: Text(
-                            '${model['date']}',
-                            style: const TextStyle(
-                                fontSize: 14,
-                                fontFamily: 'Thunder',
-                                color: Styles.greyColor),
-                          )),
                         ),
                       ],
                     ),
