@@ -135,6 +135,8 @@ Widget buildTaskItem({required Map model, context, required index}) =>
                                 style: const TextStyle(
                                     fontFamily: 'Thunder',
                                     fontSize: 20,
+                                    height: 1.1,
+                                    letterSpacing: 2,
                                     color: Styles.whiteColor)),
                           ),
                         ),
