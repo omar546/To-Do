@@ -19,5 +19,5 @@ in the process, I learned and worked with BLoC, Cubit, SQFLite
 
 ## Installation
 
-you can try it by downloading it directly from the releases
+you can try it by downloading it directly from the [releases](../../releases)
 
